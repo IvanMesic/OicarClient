@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../provider/basic_providers.dart';
+import '../provider/auth_provider.dart';
 
 class ProfileScreen extends ConsumerWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userDataFuture = ref.watch(userDataProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-      ),
+      appBar: AppBar(title: const Text('Profile')),
       body: userDataFuture.when(
-        data: (data) => _buildUserInfo(context, data),
-        loading: () => const CircularProgressIndicator(),
-        error: (error, stack) => Text('Error: $error'),
+        data: (data) => Center(child: _buildUserInfo(context, data)),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stack) => Center(child: Text('Error: $error')),
       ),
     );
   }
@@ -28,13 +26,14 @@ class ProfileScreen extends ConsumerWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text('Username: $username'),
+        Text('Username: $username',
+            style: Theme.of(context).textTheme.headline),
       ],
     );
   }
 }
 
 final userDataProvider = FutureProvider<Map<String, dynamic>>((ref) async {
-  final authService = ref.watch(authServiceProvider);
+  final authService = ref.watch(authServiceProv);
   return await authService.getUserData();
 });

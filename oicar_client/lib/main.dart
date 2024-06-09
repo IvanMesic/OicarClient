@@ -1,26 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:oicar_client/view/login.dart'; // Make sure to import your actual LoginPage
-import 'package:oicar_client/view/register.dart';
+import 'package:oicar_client/view/login.dart';
+import 'package:oicar_client/view/main_screen.dart';
+import 'package:oicar_client/view/register.dart'; // Assuming MainMenuScreen is in this path
 
 void main() {
-  runApp(
-    const ProviderScope(child: MyApp()),
-  );
+  runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Example authentication status check - replace with your actual authentication check
+    bool isAuthenticated =
+        false; // This should be dynamically determined based on user status
+
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter App',
       theme: ThemeData(
-          // ... your theme data
-          ),
-      // The MyHomePage should probably be the initial route if it's the landing page of the app
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      // Decide the initial route based on the authentication status
+      home: isAuthenticated
+          ? const MainMenuScreen()
+          : const MyHomePage(title: 'Welcome to Flutter App'),
     );
   }
 }
@@ -31,23 +37,19 @@ class MyHomePage extends StatelessWidget {
   final String title;
 
   void _navigateToRegister(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => RegisterPage(),
-    ));
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const RegisterPage()));
   }
 
   void _navigateToLogin(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) =>
-          const LoginScreen(), // Assuming you have a LoginPage
-    ));
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(title),
       ),
       body: Center(
@@ -60,8 +62,7 @@ class MyHomePage extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () => _navigateToLogin(context),
-              child:
-                  const Text('Go to Login'), // Button for navigating to Login
+              child: const Text('Go to Login'),
             ),
           ],
         ),
