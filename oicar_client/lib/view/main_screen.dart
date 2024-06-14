@@ -1,4 +1,3 @@
-// main_menu_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -19,8 +18,8 @@ class MainMenuScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<GameFillBlankDTO?>(currentGameProvider, (_, gameData) {
       if (gameData != null) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => GameScreen()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => GameFillBlankScreen()));
       }
     });
 

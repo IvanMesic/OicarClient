@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../Notifier/image_notifier.dart';
 import '../services/image_service.dart';
-import 'basic_providers.dart';
 
 final imageServiceProvider = Provider<ImageService>((ref) {
   return ImageService();

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../provider/game_providers.dart';
-import 'main_screen.dart';
+import '../widgets/game_app_bar.dart';
+import '../widgets/game_image.dart';
+import '../widgets/game_loading.dart';
 
 class PickSentenceGameScreen extends ConsumerWidget {
   const PickSentenceGameScreen({super.key});
@@ -12,16 +14,11 @@ class PickSentenceGameScreen extends ConsumerWidget {
     final gameData = ref.watch(currentPickSentenceGameProvider);
 
     if (gameData == null) {
-      return Scaffold(
-        appBar: AppBar(title: Text('Loading Game...')),
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const GameLoading(title: 'Pick Sentence Game');
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Pick Sentence Game'),
-      ),
+      appBar: const GameAppBar(title: 'Pick Sentence Game'),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -31,12 +28,7 @@ class PickSentenceGameScreen extends ConsumerWidget {
               if (gameData.contextImage != null)
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Image.network(
-                    gameData.contextImage!.imagePath,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Image.asset('assets/fallback_image.jpg');
-                    },
-                  ),
+                  child: GameImage(imagePath: gameData.contextImage!.imagePath),
                 ),
               const SizedBox(height: 20),
               ...gameData.answers.map((answer) => Container(
@@ -73,10 +65,6 @@ class PickSentenceGameScreen extends ConsumerWidget {
 
   void exitGame(BuildContext context, WidgetRef ref) {
     ref.read(pickSentenceGameStateNotifierProvider.notifier).resetGame();
-
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => const MainMenuScreen()),
-      (Route<dynamic> route) => false,
-    );
+    Navigator.of(context).pop();
   }
 }

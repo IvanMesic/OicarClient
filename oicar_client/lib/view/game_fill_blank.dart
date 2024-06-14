@@ -2,37 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../provider/game_providers.dart';
-import 'main_screen.dart';
+import '../widgets/game_app_bar.dart';
+import '../widgets/game_buttons.dart';
+import '../widgets/game_image.dart';
+import '../widgets/game_loading.dart';
+import '../widgets/game_text_field.dart';
 
-class GameScreen extends ConsumerWidget {
-  GameScreen({Key? key}) : super(key: key);
+class GameFillBlankScreen extends ConsumerWidget {
+  GameFillBlankScreen({Key? key}) : super(key: key);
 
-  // Initialize TextEditingController to capture user input
   final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Listen to game data changes
     final gameData = ref.watch(currentGameProvider);
 
     if (gameData == null) {
-      return Scaffold(
-        appBar: AppBar(title: Text('Loading Game...')),
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const GameLoading(title: 'Fill in the Blank');
     }
 
-    // Components to handle the split parts of the game sentence
     List<String> parts = gameData.sentence.split('_');
     String beforeBlank = parts[0];
     String afterBlank = (parts.length > 1) ? parts[1] : "";
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Fill in the Blank',
-            style:
-                TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.bold)),
-      ),
+      appBar: const GameAppBar(title: 'Fill in the Blank'),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -42,37 +36,16 @@ class GameScreen extends ConsumerWidget {
               if (gameData.contextImage != null)
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Image.network(
-                    gameData.contextImage!.imagePath,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Image.asset('assets/fallback_image.jpg');
-                    },
-                  ),
+                  child: GameImage(imagePath: gameData.contextImage!.imagePath),
                 ),
               const SizedBox(height: 20),
               Text('$beforeBlank _ $afterBlank'),
-              TextField(
-                controller: _controller, // Use the TextEditingController here
-                decoration: const InputDecoration(
-                  hintText: 'Type here',
-                  border: OutlineInputBorder(),
-                ),
-              ),
+              GameTextField(controller: _controller),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  // Pass the actual input from the TextField
-                  if (_controller.text.isNotEmpty) {
-                    submitResponse(context, ref, _controller.text);
-                  }
-                },
-                child: const Text("Submit"),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => exitGame(context, ref),
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                child: const Text("Exit Game"),
+              GameButtons(
+                controller: _controller,
+                onSubmit: (response) => submitResponse(context, ref, response),
+                onExit: () => exitGame(context, ref),
               ),
             ],
           ),
@@ -94,10 +67,6 @@ class GameScreen extends ConsumerWidget {
 
   void exitGame(BuildContext context, WidgetRef ref) {
     ref.read(gameStateNotifierProvider.notifier).resetGame();
-
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => const MainMenuScreen()),
-      (Route<dynamic> route) => false,
-    );
+    Navigator.of(context).pop();
   }
 }

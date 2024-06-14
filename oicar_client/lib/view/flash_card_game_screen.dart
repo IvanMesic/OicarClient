@@ -1,8 +1,12 @@
-// flash_card_game_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../provider/game_providers.dart';
+import '../widgets/game_app_bar.dart';
+import '../widgets/game_buttons.dart';
+import '../widgets/game_image.dart';
+import '../widgets/game_loading.dart';
+import '../widgets/game_text_field.dart';
 
 class FlashCardGameScreen extends ConsumerStatefulWidget {
   const FlashCardGameScreen({Key? key}) : super(key: key);
@@ -19,55 +23,25 @@ class _FlashCardGameScreenState extends ConsumerState<FlashCardGameScreen> {
     final gameData = ref.watch(currentFlashCardGameProvider);
 
     if (gameData == null) {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text('Flash Card Game'),
-        ),
-        body: const Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
+      return const GameLoading(title: 'Flash Card Game');
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Flash Card Game'),
-      ),
+      appBar: const GameAppBar(title: 'Flash Card Game'),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.network(
-                gameData.contextImage.imagePath,
-                fit: BoxFit.cover,
-                width: 200,
-                height: 200,
-              ),
+              GameImage(imagePath: gameData.contextImage.imagePath),
               const SizedBox(height: 20),
+              GameTextField(controller: _controller),
               const SizedBox(height: 20),
-              TextField(
+              GameButtons(
                 controller: _controller,
-                decoration: const InputDecoration(
-                  hintText: 'Type your answer here',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  if (_controller.text.isNotEmpty) {
-                    submitResponse(context, ref, _controller.text);
-                  }
-                },
-                child: const Text("Submit"),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => exitGame(context, ref),
-                child: const Text("Exit Game"),
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                onSubmit: (response) => submitResponse(context, ref, response),
+                onExit: () => exitGame(context, ref),
               ),
             ],
           ),
