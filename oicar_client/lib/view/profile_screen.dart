@@ -27,7 +27,7 @@ class ProfileScreen extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text('Username: $username',
-            style: Theme.of(context).textTheme.headline),
+            style: Theme.of(context).textTheme.displayLarge),
       ],
     );
   }

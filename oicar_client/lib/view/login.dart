@@ -3,9 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oicar_client/view/main_screen.dart';
 
 import '../notifier/auth_notifier.dart';
+import 'register.dart'; // Import your register page
 
 class LoginScreen extends ConsumerWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -20,8 +21,9 @@ class LoginScreen extends ConsumerWidget {
       } else if (next.status == AuthStatus.error) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: Text(next.error ?? 'Login failed'),
-              backgroundColor: Colors.red),
+            content: Text(next.error ?? 'Login failed'),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     });
@@ -37,7 +39,9 @@ class LoginScreen extends ConsumerWidget {
               TextField(
                 controller: usernameController,
                 decoration: const InputDecoration(
-                    labelText: 'Username', prefixIcon: Icon(Icons.person)),
+                  labelText: 'Username',
+                  prefixIcon: Icon(Icons.person),
+                ),
               ),
               const SizedBox(height: 8),
               TextField(
@@ -55,12 +59,29 @@ class LoginScreen extends ConsumerWidget {
                     .login(usernameController.text, passwordController.text),
                 child: const Text('Login'),
               ),
+              const SizedBox(height: 10),
+              Center( // Center the Register text
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const RegisterPage(), // Navigate to register page
+                    ));
+                  },
+                  child: Text(
+                    'Register?',
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
+              ),
               const SizedBox(height: 20),
               Consumer(
                 builder: (context, ref, _) {
                   final authState = ref.watch(authNotifierProvider);
                   if (authState.status == AuthStatus.loading) {
-                    return const CircularProgressIndicator();
+                    return const Center(child: CircularProgressIndicator());
                   }
                   return const SizedBox.shrink();
                 },

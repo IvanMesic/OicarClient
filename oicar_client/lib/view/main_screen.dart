@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:oicar_client/view/login.dart';
 
 import '../model/game_fill_blank_model.dart';
 import '../model/game_flash_card_model.dart';
@@ -24,12 +25,12 @@ class MainMenuScreen extends ConsumerWidget {
     });
 
     ref.listen<GamePickSentenceDTO?>(currentPickSentenceGameProvider,
-        (_, gameData) {
-      if (gameData != null) {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => PickSentenceGameScreen()));
-      }
-    });
+            (_, gameData) {
+          if (gameData != null) {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => PickSentenceGameScreen()));
+          }
+        });
 
     ref.listen<GameFlashCardDTO?>(currentFlashCardGameProvider, (_, gameData) {
       if (gameData != null) {
@@ -40,11 +41,30 @@ class MainMenuScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Main Menu"),
+        title: const Text("Pick a game"),
         actions: [
           IconButton(
             icon: const Icon(Icons.language),
             onPressed: () => showLanguageDialog(context, ref),
+            style: IconButton.styleFrom(
+              foregroundColor: Colors.white, // Icon color
+              backgroundColor: Colors.blueAccent, // Button background color
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.exit_to_app),
+            onPressed: () {
+              // Perform logout functionality here
+              // For example, reset authentication status and navigate to login screen
+              // ref.read(authNotifierProvider.notifier).logout(); // Ivan fix here
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const LoginScreen(), // Navigate to register page
+              )); // Replace with your login route
+            },
+            style: IconButton.styleFrom(
+              foregroundColor: Colors.white, // Icon color
+              backgroundColor: Colors.red, // Button background color
+            ),
           ),
         ],
       ),
@@ -52,15 +72,128 @@ class MainMenuScreen extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
-              onPressed: () => startGame(context, ref, GameType.fillBlank),
-              child: const Text('Fill Blank Game'),
+            // Replace the first game button with a card
+
+        Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0), // Adjust vertical spacing between cards
+        child:
+            GestureDetector(
+              onTap: () => startGame(context, ref, GameType.fillBlank),
+              child: Card(
+                elevation: 5,
+                margin: const EdgeInsets.symmetric(horizontal: 16.0), // Adjust margin as needed
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0), // Rounded corners
+                ),
+                child: SizedBox(
+                  width: double.infinity, // Expand card to full width
+                  height: 180, // Set total height of the card
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      // Image with top portion shown
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10.0), // Rounded corners for image
+                        child: Image.asset(
+                          'assets/gifs/fill_in_the_blank_preview.gif', // Replace with your GIF path
+                          width: double.infinity, // Full width of the card
+                          fit: BoxFit.fitWidth, // Fit entire width of the image
+                          alignment: Alignment.topCenter, // Show the top portion of the image
+                        ),
+                      ),
+                      // Background and text at the bottom
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.5), // Background color with opacity
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(10.0),
+                              bottomRight: Radius.circular(10.0),
+                            ),
+                          ),
+                          child: Text(
+                            'Fill in the blank game',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white, // Text color
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => startGame(context, ref, GameType.pickSentence),
-              child: const Text('Pick Sentence Game'),
+        ),
+
+
+
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0), // Adjust vertical spacing between cards
+        child:
+            GestureDetector(
+              onTap: () => startGame(context, ref, GameType.pickSentence),
+              child: Card(
+                elevation: 5,
+                margin: const EdgeInsets.symmetric(horizontal: 16.0), // Adjust margin as needed
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0), // Rounded corners
+                ),
+                child: SizedBox(
+                  width: double.infinity, // Expand card to full width
+                  height: 180, // Set total height of the card
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      // Image with top portion shown
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10.0), // Rounded corners for image
+                        child: Image.asset(
+                          'assets/gifs/pick_a_sentence_preview.gif', // Replace with your GIF path
+                          width: double.infinity, // Full width of the card
+                          fit: BoxFit.fitWidth, // Fit entire width of the image
+                          alignment: Alignment.topCenter, // Show the top portion of the image
+                        ),
+                      ),
+                      // Background and text at the bottom
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.5), // Background color with opacity
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(10.0),
+                              bottomRight: Radius.circular(10.0),
+                            ),
+                          ),
+                          child: Text(
+                            'Pick a sentence game',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white, // Text color
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
+      ),
+
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => startGame(context, ref, GameType.flashCard),

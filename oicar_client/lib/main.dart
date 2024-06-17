@@ -18,32 +18,28 @@ class MyApp extends ConsumerWidget {
         false; // This should be dynamically determined based on user status
 
     return MaterialApp(
-      title: 'Flutter App',
+      title: 'Jezikstar',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       // Decide the initial route based on the authentication status
-      home: isAuthenticated
-          ? const MainMenuScreen()
-          : const MyHomePage(title: 'Welcome to Flutter App'),
+      home: const MyHomePage(title: 'Jezikstar'),
     );
   }
 }
 
 class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   void _navigateToRegister(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const RegisterPage()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const RegisterPage()));
   }
 
   void _navigateToLogin(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const LoginScreen()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
 
   @override
@@ -56,13 +52,31 @@ class MyHomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            ElevatedButton(
-              onPressed: () => _navigateToRegister(context),
-              child: const Text('Go to Register'),
+            // Display an image (adjust size and path as needed)
+            Image.asset(
+              'assets/logo.png', // Example image path
+              width: 275,
+              height: 275,
+              fit: BoxFit.contain,
             ),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => _navigateToLogin(context),
-              child: const Text('Go to Login'),
+              child: const Text('Log in'),
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(200, 50),
+              ),
+            ),
+            const SizedBox(height: 20),
+            GestureDetector(
+              onTap: () => _navigateToRegister(context),
+              child: Text(
+                "Don't have an account? Register",
+                style: TextStyle(
+                  decoration: TextDecoration.underline,
+                  color: Colors.blue,
+                ),
+              ),
             ),
           ],
         ),
