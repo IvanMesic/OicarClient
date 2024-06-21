@@ -27,7 +27,10 @@ class _FlashCardGameScreenState extends ConsumerState<FlashCardGameScreen> {
     }
 
     return Scaffold(
-      appBar: const GameAppBar(title: 'Flash Card Game'),
+      appBar:  GameAppBar(
+          title: 'Flash Card Game',
+          exitGame: exitGame,
+      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

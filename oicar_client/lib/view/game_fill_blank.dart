@@ -26,7 +26,10 @@ class GameFillBlankScreen extends ConsumerWidget {
     String afterBlank = (parts.length > 1) ? parts[1] : "";
 
     return Scaffold(
-      appBar: const GameAppBar(title: 'Fill in the Blank'),
+      appBar:  GameAppBar(
+          title: 'Fill in the Blank',
+          exitGame: exitGame,
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

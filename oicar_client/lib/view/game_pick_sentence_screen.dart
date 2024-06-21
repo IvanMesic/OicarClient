@@ -18,7 +18,10 @@ class PickSentenceGameScreen extends ConsumerWidget {
     }
 
     return Scaffold(
-      appBar: const GameAppBar(title: 'Pick Sentence Game'),
+      appBar: GameAppBar(
+          title: 'Pick Sentence Game',
+          exitGame: exitGame,
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -45,11 +48,7 @@ class PickSentenceGameScreen extends ConsumerWidget {
                     ),
                   )),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => exitGame(context, ref),
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                child: const Text("Exit Game"),
-              ),
+
             ],
           ),
         ),

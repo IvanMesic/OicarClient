@@ -25,11 +25,7 @@ class GameButtons extends StatelessWidget {
           child: const Text("Submit"),
         ),
         const SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: onExit,
-          child: const Text("Exit Game"),
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-        ),
+
       ],
     );
   }
