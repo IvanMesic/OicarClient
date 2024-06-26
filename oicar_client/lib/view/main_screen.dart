@@ -11,6 +11,7 @@ import '../services/preference_service.dart';
 import 'flash_card_game_screen.dart';
 import 'game_fill_blank.dart';
 import 'game_pick_sentence_screen.dart';
+import 'stats_view.dart'; // Import the StatsView
 
 class MainMenuScreen extends ConsumerWidget {
   const MainMenuScreen({super.key});
@@ -27,15 +28,19 @@ class MainMenuScreen extends ConsumerWidget {
     ref.listen<GamePickSentenceDTO?>(currentPickSentenceGameProvider,
         (_, gameData) {
       if (gameData != null) {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => PickSentenceGameScreen()));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const PickSentenceGameScreen()));
       }
     });
 
     ref.listen<GameFlashCardDTO?>(currentFlashCardGameProvider, (_, gameData) {
       if (gameData != null) {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => FlashCardGameScreen()));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const FlashCardGameScreen()));
       }
     });
 
@@ -54,13 +59,10 @@ class MainMenuScreen extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.exit_to_app),
             onPressed: () {
-              // Perform logout functionality here
-              // For example, reset authentication status and navigate to login screen
-              // ref.read(authNotifierProvider.notifier).logout(); // Ivan fix here
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) =>
-                    const LoginScreen(), // Navigate to register page
-              )); // Replace with your login route
+                    const LoginScreen(), // Navigate to login screen
+              ));
             },
             style: IconButton.styleFrom(
               foregroundColor: Colors.white, // Icon color
@@ -73,17 +75,13 @@ class MainMenuScreen extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Replace the first game button with a card
-
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
-              // Adjust vertical spacing between cards
               child: GestureDetector(
                 onTap: () => startGame(context, ref, GameType.fillBlank),
                 child: Card(
                   elevation: 5,
                   margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                  // Adjust margin as needed
                   shape: RoundedRectangleBorder(
                     borderRadius:
                         BorderRadius.circular(10.0), // Rounded corners
@@ -94,22 +92,16 @@ class MainMenuScreen extends ConsumerWidget {
                     child: Stack(
                       fit: StackFit.expand,
                       children: [
-                        // Image with top portion shown
                         ClipRRect(
                           borderRadius: BorderRadius.circular(10.0),
-                          // Rounded corners for image
                           child: Image.asset(
-                            'assets/gifs/fill_in_the_blank_preview.gif',
-                            // Replace with your GIF path
+                            'assets/gifs/fill_in_the_blank_preview.gif', // Replace with your GIF path
                             width: double.infinity,
-                            // Full width of the card
                             fit: BoxFit.fitWidth,
-                            // Fit entire width of the image
                             alignment: Alignment
                                 .topCenter, // Show the top portion of the image
                           ),
                         ),
-                        // Background and text at the bottom
                         Positioned(
                           bottom: 0,
                           left: 0,
@@ -117,14 +109,14 @@ class MainMenuScreen extends ConsumerWidget {
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
                             decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.5),
-                              // Background color with opacity
-                              borderRadius: BorderRadius.only(
+                              color: Colors.black.withOpacity(
+                                  0.5), // Background color with opacity
+                              borderRadius: const BorderRadius.only(
                                 bottomLeft: Radius.circular(10.0),
                                 bottomRight: Radius.circular(10.0),
                               ),
                             ),
-                            child: Text(
+                            child: const Text(
                               'Fill in the blank game',
                               style: TextStyle(
                                 fontSize: 20,
@@ -141,16 +133,13 @@ class MainMenuScreen extends ConsumerWidget {
                 ),
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
-              // Adjust vertical spacing between cards
               child: GestureDetector(
                 onTap: () => startGame(context, ref, GameType.pickSentence),
                 child: Card(
                   elevation: 5,
                   margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                  // Adjust margin as needed
                   shape: RoundedRectangleBorder(
                     borderRadius:
                         BorderRadius.circular(10.0), // Rounded corners
@@ -161,22 +150,16 @@ class MainMenuScreen extends ConsumerWidget {
                     child: Stack(
                       fit: StackFit.expand,
                       children: [
-                        // Image with top portion shown
                         ClipRRect(
                           borderRadius: BorderRadius.circular(10.0),
-                          // Rounded corners for image
                           child: Image.asset(
-                            'assets/gifs/pick_a_sentence_preview.gif',
-                            // Replace with your GIF path
+                            'assets/gifs/pick_a_sentence_preview.gif', // Replace with your GIF path
                             width: double.infinity,
-                            // Full width of the card
                             fit: BoxFit.fitWidth,
-                            // Fit entire width of the image
                             alignment: Alignment
                                 .topCenter, // Show the top portion of the image
                           ),
                         ),
-                        // Background and text at the bottom
                         Positioned(
                           bottom: 0,
                           left: 0,
@@ -184,14 +167,14 @@ class MainMenuScreen extends ConsumerWidget {
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
                             decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.5),
-                              // Background color with opacity
-                              borderRadius: BorderRadius.only(
+                              color: Colors.black.withOpacity(
+                                  0.5), // Background color with opacity
+                              borderRadius: const BorderRadius.only(
                                 bottomLeft: Radius.circular(10.0),
                                 bottomRight: Radius.circular(10.0),
                               ),
                             ),
-                            child: Text(
+                            child: const Text(
                               'Pick a sentence game',
                               style: TextStyle(
                                 fontSize: 20,
@@ -208,16 +191,13 @@ class MainMenuScreen extends ConsumerWidget {
                 ),
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
-              // Adjust vertical spacing between cards
               child: GestureDetector(
                 onTap: () => startGame(context, ref, GameType.flashCard),
                 child: Card(
                   elevation: 5,
                   margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                  // Adjust margin as needed
                   shape: RoundedRectangleBorder(
                     borderRadius:
                         BorderRadius.circular(10.0), // Rounded corners
@@ -228,12 +208,10 @@ class MainMenuScreen extends ConsumerWidget {
                     child: Stack(
                       fit: StackFit.expand,
                       children: [
-                        // Image with top portion shown
                         ClipRRect(
                           borderRadius: BorderRadius.circular(10.0),
                           child: Image.network(
-                            'https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExanRic21jaHdqMjNzbnFvZXk1aTNoZWVuaWNocnY5YXNpaG1pc2lhdiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o6vXNQiixBMsf4Dra/giphy.webp',
-                            // URL of the GIF
+                            'https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExanRic21jaHdqMjNzbnFvZXk1aTNoZWVuaWNocnY5YXNpaG1pc2lhdiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o6vXNQiixBMsf4Dra/giphy.webp', // URL of the GIF
                             width: double.infinity,
                             fit: BoxFit.fitWidth,
                             alignment: Alignment.topCenter,
@@ -246,14 +224,14 @@ class MainMenuScreen extends ConsumerWidget {
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
                             decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.5),
-                              // Background color with opacity
-                              borderRadius: BorderRadius.only(
+                              color: Colors.black.withOpacity(
+                                  0.5), // Background color with opacity
+                              borderRadius: const BorderRadius.only(
                                 bottomLeft: Radius.circular(10.0),
                                 bottomRight: Radius.circular(10.0),
                               ),
                             ),
-                            child: Text(
+                            child: const Text(
                               'Flash Card game',
                               style: TextStyle(
                                 fontSize: 20,
@@ -270,6 +248,31 @@ class MainMenuScreen extends ConsumerWidget {
                 ),
               ),
             ),
+            // Add Stats button here
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  final langId = ref.read(languageIdProvider);
+                  if (langId != null) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => StatsView(langId: langId),
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Please select a language first!')),
+                    );
+                  }
+                },
+                child: const Text('View Stats'),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(200, 50), // Adjust the button size
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -283,9 +286,7 @@ class MainMenuScreen extends ConsumerWidget {
     if (language != null) {
       try {
         if (gameType == GameType.fillBlank) {
-          await ref
-              .read(gameStateNotifierProvider.notifier)
-              .fetchGame();
+          await ref.read(gameStateNotifierProvider.notifier).fetchGame();
         } else if (gameType == GameType.pickSentence) {
           await ref
               .read(pickSentenceGameStateNotifierProvider.notifier)
@@ -299,8 +300,9 @@ class MainMenuScreen extends ConsumerWidget {
         _showEndGameConfirmationDialog(context, ref);
       }
     } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Please select a language first!')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select a language first!')),
+      );
     }
   }
 
@@ -322,7 +324,7 @@ class MainMenuScreen extends ConsumerWidget {
             TextButton(
               onPressed: () async {
                 Navigator.of(context).pop();
-                await deleteGame(context, ref);
+                await deleteGame(ref);
               },
               child: const Text('OK'),
             ),
@@ -332,31 +334,22 @@ class MainMenuScreen extends ConsumerWidget {
     );
   }
 
-  Future<void> deleteGame(BuildContext context, WidgetRef ref) async {
+  Future<void> deleteGame(WidgetRef ref) async {
     final gameService = ref.read(gameServiceProvider);
 
     try {
       await gameService.deleteCurrentFillBlankGame();
-    } catch (e) {
-
-    }
+    } catch (e) {}
 
     try {
       await gameService.deleteCurrentPickSentenceGame();
-    } catch (e) {
-
-    }
+    } catch (e) {}
 
     try {
       await gameService.deleteCurrentFlashCardGame();
-    } catch (e) {
-
-    }
+    } catch (e) {}
 
     ref.read(gameTypeProvider.notifier).state = GameType.none;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Games ended successfully')),
-    );
   }
 
   void showLanguageDialog(BuildContext context, WidgetRef ref) {

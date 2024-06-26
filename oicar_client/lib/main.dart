@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oicar_client/view/login.dart';
-import 'package:oicar_client/view/main_screen.dart';
 import 'package:oicar_client/view/register.dart'; // Assuming MainMenuScreen is in this path
 
 void main() {
@@ -35,11 +34,13 @@ class MyHomePage extends StatelessWidget {
   final String title;
 
   void _navigateToRegister(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const RegisterPage()));
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const RegisterPage()));
   }
 
   void _navigateToLogin(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LoginScreen()));
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
 
   @override
