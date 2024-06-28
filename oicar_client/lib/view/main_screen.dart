@@ -69,6 +69,27 @@ class MainMenuScreen extends ConsumerWidget {
               backgroundColor: Colors.red, // Button background color
             ),
           ),
+          IconButton(
+            icon: const Icon(Icons.bar_chart), // Icon can be changed to profile or statistics icon
+            onPressed: () {
+              final langId = ref.read(languageIdProvider);
+              if (langId != null) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => StatsView(langId: langId),
+                  ),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Please select a language first!')),
+                );
+              }
+            },
+            style: IconButton.styleFrom(
+              foregroundColor: Colors.white, // Icon color
+              backgroundColor: Colors.green, // Button background color
+            ),
+          ),
         ],
       ),
       body: Center(
@@ -248,31 +269,7 @@ class MainMenuScreen extends ConsumerWidget {
                 ),
               ),
             ),
-            // Add Stats button here
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  final langId = ref.read(languageIdProvider);
-                  if (langId != null) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => StatsView(langId: langId),
-                      ),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Please select a language first!')),
-                    );
-                  }
-                },
-                child: const Text('View Stats'),
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(200, 50), // Adjust the button size
-                ),
-              ),
-            ),
+
           ],
         ),
       ),

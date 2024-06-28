@@ -1,39 +1,109 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../provider/auth_provider.dart';
+import '../provider/stats_service_provider.dart';
 
-class ProfileScreen extends ConsumerWidget {
-  const ProfileScreen({super.key});
+class StatsView extends ConsumerWidget {
+  final int langId;
+
+  const StatsView({required this.langId, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userDataFuture = ref.watch(userDataProvider);
+    final statsAsyncValue = ref.watch(statsProvider(langId));
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Profile')),
-      body: userDataFuture.when(
-        data: (data) => Center(child: _buildUserInfo(context, data)),
+      appBar: AppBar(
+        title: const Text('Language Stats'),
+      ),
+      body: statsAsyncValue.when(
+        data: (stats) {
+          if (stats.length < 6) {
+            return const Center(child: Text('Not enough data available.'));
+          }
+
+          // Calculate the values for the new progress bar
+          final sum = stats[1].score + stats[3].score + stats[4].score;
+          final level = sum ~/ 5;
+          final levelProgress = (sum % 5).toDouble();
+
+          return ListView(
+            padding: const EdgeInsets.all(16.0),
+            children: [
+              Center(
+                child: Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundImage: AssetImage('assets/profile.jpg'),
+                    ),
+                    const SizedBox(height: 16.0),
+                    Center(
+                      child: FractionallySizedBox(
+                        widthFactor: 0.4,
+                        child: _buildProgressBar(
+                          title: 'Level $level',
+                          maxValue: 5.0,
+                          progressValue: levelProgress,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 32.0),
+                  ],
+                ),
+              ),
+              _buildProgressBar(
+                title: 'Fill the blank',
+                maxValue: stats[0].score.toDouble(),
+                progressValue: stats[1].score.toDouble(),
+              ),
+              const SizedBox(height: 16.0),
+              _buildProgressBar(
+                title: 'Flash cards',
+                maxValue: stats[2].score.toDouble(),
+                progressValue: stats[3].score.toDouble(),
+              ),
+              const SizedBox(height: 16.0),
+              _buildProgressBar(
+                title: 'Pick the sentence',
+                maxValue: stats[5].score.toDouble(),
+                progressValue: stats[4].score.toDouble(),
+              ),
+            ],
+          );
+        },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(child: Text('Error: $error')),
       ),
     );
   }
 
-  Widget _buildUserInfo(BuildContext context, Map<String, dynamic> userData) {
-    final username = userData['username'] ?? 'Unknown';
+  Widget _buildProgressBar({
+    required String title,
+    required double maxValue,
+    required double progressValue,
+  }) {
+    final progress = (progressValue / maxValue).clamp(0.0, 1.0);
 
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text('Username: $username',
-            style: Theme.of(context).textTheme.displayLarge),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8.0),
+        LinearProgressIndicator(
+          value: progress,
+          backgroundColor: Colors.grey[300],
+          color: Colors.blue,
+        ),
+        const SizedBox(height: 4.0),
+        Text(
+          '${(progress * 100).toStringAsFixed(1)}%',
+          style: const TextStyle(fontSize: 16.0),
+        ),
       ],
     );
   }
 }
-
-final userDataProvider = FutureProvider<Map<String, dynamic>>((ref) async {
-  final authService = ref.watch(authServiceProv);
-  return await authService.getUserData();
-});
