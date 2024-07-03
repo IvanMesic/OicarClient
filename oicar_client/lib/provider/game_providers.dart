@@ -1,17 +1,17 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../Notifier/flash_card_game_response_notifier.dart';
-import '../Notifier/flash_card_game_state_notifier.dart';
-import '../Notifier/game_response_notifier.dart';
-import '../Notifier/game_state_notifier.dart';
-import '../Notifier/pick_sentence_game_response_notifier.dart';
-import '../Notifier/pick_sentence_game_state_notifier.dart';
 import '../model/game_fill_blank_model.dart';
 import '../model/game_flash_card_model.dart';
 import '../model/game_pick_sentence_model.dart';
+import '../model/game_type.dart';
+import '../notifier/flash_card_game_response_notifier.dart';
+import '../notifier/flash_card_game_state_notifier.dart';
+import '../notifier/game_response_notifier.dart';
+import '../notifier/game_state_notifier.dart';
+import '../notifier/pick_sentence_game_response_notifier.dart';
+import '../notifier/pick_sentence_game_state_notifier.dart';
 import '../services/game_service.dart';
-import '../view/main_screen.dart';
 
 final dioProvider = Provider<Dio>((ref) => Dio());
 

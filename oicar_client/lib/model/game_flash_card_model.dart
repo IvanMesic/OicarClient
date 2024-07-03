@@ -11,7 +11,7 @@ class GameFlashCardDTO {
   final String answer;
   final int id;
   final LanguageDTO language;
-  final ContextImageDTO contextImage;
+  final ContextImageDTO? contextImage;
 
   GameFlashCardDTO({
     required this.text,

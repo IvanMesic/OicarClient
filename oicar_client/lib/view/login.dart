@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oicar_client/view/main_screen.dart';
 
 import '../notifier/auth_notifier.dart';
-import 'register.dart'; // Import your register page
+import 'register.dart';
 
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -21,6 +21,7 @@ class LoginScreen extends ConsumerWidget {
       } else if (next.status == AuthStatus.error) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
+            key: Key('login_error_snackbar'),
             content: Text(next.error ?? 'Login failed'),
             backgroundColor: Colors.red,
           ),
@@ -37,6 +38,7 @@ class LoginScreen extends ConsumerWidget {
             shrinkWrap: true,
             children: [
               TextField(
+                key: Key('username_field'),
                 controller: usernameController,
                 decoration: const InputDecoration(
                   labelText: 'Username',
@@ -45,6 +47,7 @@ class LoginScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 8),
               TextField(
+                key: Key('password_field'),
                 controller: passwordController,
                 decoration: const InputDecoration(
                   labelText: 'Password',
@@ -54,17 +57,18 @@ class LoginScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
+                key: Key('login_button'),
                 onPressed: () => ref
                     .read(authNotifierProvider.notifier)
                     .login(usernameController.text, passwordController.text),
                 child: const Text('Login'),
               ),
               const SizedBox(height: 10),
-              Center( // Center the Register text
+              Center(
                 child: GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const RegisterPage(), // Navigate to register page
+                      builder: (context) => const RegisterPage(),
                     ));
                   },
                   child: Text(

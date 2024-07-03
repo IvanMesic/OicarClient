@@ -49,37 +49,41 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text(title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            // Display an image (adjust size and path as needed)
-            Image.asset(
-              'assets/logo.png', // Example image path
-              width: 275,
-              height: 275,
-              fit: BoxFit.contain,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => _navigateToLogin(context),
-              child: const Text('Log in'),
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(200, 50),
+      body: SingleChildScrollView(
+        // Wrap with SingleChildScrollView
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              // Display an image (adjust size and path as needed)
+              Image.asset(
+                'assets/logo.png', // Example image path
+                width: 275,
+                height: 275,
+                fit: BoxFit.contain,
               ),
-            ),
-            const SizedBox(height: 20),
-            GestureDetector(
-              onTap: () => _navigateToRegister(context),
-              child: Text(
-                "Don't have an account? Register",
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  color: Colors.blue,
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () => _navigateToLogin(context),
+                child: const Text('Log in'),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(200, 50),
                 ),
               ),
-            ),
-          ],
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: () => _navigateToRegister(context),
+                key: const Key('register_button_main'), // Add key
+                child: Text(
+                  "Don't have an account? Register",
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

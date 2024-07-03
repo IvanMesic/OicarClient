@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../provider/stats_service_provider.dart';
 
@@ -7,6 +8,11 @@ class StatsView extends ConsumerWidget {
   final int langId;
 
   const StatsView({required this.langId, Key? key}) : super(key: key);
+
+  Future<String?> _getUsername() async {
+    const storage = FlutterSecureStorage();
+    return await storage.read(key: 'username');
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,52 +33,65 @@ class StatsView extends ConsumerWidget {
           final level = sum ~/ 5;
           final levelProgress = (sum % 5).toDouble();
 
-          return ListView(
-            padding: const EdgeInsets.all(16.0),
-            children: [
-              Center(
-                child: Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundImage: AssetImage('assets/profile.jpg'),
+          return FutureBuilder<String?>(
+            future: _getUsername(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              final username = snapshot.data ?? "Username";
+
+              return ListView(
+                padding: const EdgeInsets.all(16.0),
+                children: [
+                  Center(
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundImage: AssetImage('assets/profile.jpg'),
+                        ),
+                        const SizedBox(height: 16.0),
+                        Text(
+                          username,
+                          style: const TextStyle(
+                              fontSize: 20.0, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 16.0),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width *
+                              0.4, // 40% of the screen width
+                          child: _buildProgressBar(
+                            title: 'Level $level',
+                            maxValue: 5.0,
+                            progressValue: levelProgress,
+                          ),
+                        ),
+                        const SizedBox(height: 32.0),
+                      ],
                     ),
-                    const SizedBox(height: 16.0),
-                    Text(
-                      "Username",
-                      style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 16.0),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.4, // 40% of the screen width
-                      child: _buildProgressBar(
-                        title: 'Level $level',
-                        maxValue: 5.0,
-                        progressValue: levelProgress,
-                      ),
-                    ),
-                    const SizedBox(height: 32.0),
-                  ],
-                ),
-              ),
-              _buildProgressBar(
-                title: 'Fill the blank',
-                maxValue: stats[0].score.toDouble(),
-                progressValue: stats[1].score.toDouble(),
-              ),
-              const SizedBox(height: 16.0),
-              _buildProgressBar(
-                title: 'Flash cards',
-                maxValue: stats[2].score.toDouble(),
-                progressValue: stats[3].score.toDouble(),
-              ),
-              const SizedBox(height: 16.0),
-              _buildProgressBar(
-                title: 'Pick the sentence',
-                maxValue: stats[4].score.toDouble(),
-                progressValue: stats[5].score.toDouble(),
-              ),
-            ],
+                  ),
+                  _buildProgressBar(
+                    title: 'Fill the blank',
+                    maxValue: stats[0].score.toDouble(),
+                    progressValue: stats[1].score.toDouble(),
+                  ),
+                  const SizedBox(height: 16.0),
+                  _buildProgressBar(
+                    title: 'Flash cards',
+                    maxValue: stats[2].score.toDouble(),
+                    progressValue: stats[3].score.toDouble(),
+                  ),
+                  const SizedBox(height: 16.0),
+                  _buildProgressBar(
+                    title: 'Pick the sentence',
+                    maxValue: stats[4].score.toDouble(),
+                    progressValue: stats[5].score.toDouble(),
+                  ),
+                ],
+              );
+            },
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),

@@ -8,7 +8,7 @@ import '../model/game_flash_card_model.dart';
 import '../model/game_pick_sentence_model.dart';
 
 class GameService {
-  final Dio dio = DioClient().dio;
+  Dio dio = DioClient().dio;
 
   Future<int?> _getSavedLanguageId() async {
     final prefs = await SharedPreferences.getInstance();

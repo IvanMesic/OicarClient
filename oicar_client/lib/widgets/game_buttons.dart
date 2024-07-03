@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class GameButtons extends StatelessWidget {
   final TextEditingController controller;
   final void Function(String) onSubmit;
-  final VoidCallback onExit;
+  final void Function(BuildContext, WidgetRef) onExit;
 
   const GameButtons({
     Key? key,
@@ -14,19 +15,22 @@ class GameButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ElevatedButton(
-          onPressed: () {
-            if (controller.text.isNotEmpty) {
-              onSubmit(controller.text);
-            }
-          },
-          child: const Text("Submit"),
-        ),
-        const SizedBox(height: 20),
-
-      ],
+    return Consumer(
+      builder: (context, ref, _) {
+        return Column(
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                if (controller.text.isNotEmpty) {
+                  onSubmit(controller.text);
+                }
+              },
+              child: const Text("Submit"),
+            ),
+            const SizedBox(height: 20),
+          ],
+        );
+      },
     );
   }
 }

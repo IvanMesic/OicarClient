@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../model/game_pick_sentence_model.dart';
+import '../model/game_type.dart';
 import '../provider/game_providers.dart';
 import '../services/game_service.dart';
-import '../view/main_screen.dart';
 
 class PickSentenceGameStateNotifier
     extends StateNotifier<GamePickSentenceDTO?> {

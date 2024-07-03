@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../model/game_flash_card_model.dart';
+import '../model/game_type.dart';
 import '../provider/game_providers.dart';
 import '../services/game_service.dart';
-import '../view/main_screen.dart';
 
 class FlashCardGameStateNotifier extends StateNotifier<GameFlashCardDTO?> {
   final GameService gameService;
@@ -16,6 +16,7 @@ class FlashCardGameStateNotifier extends StateNotifier<GameFlashCardDTO?> {
       final gameData = await gameService.fetchFlashCardGame();
       ref.read(currentFlashCardGameProvider.notifier).state = gameData;
       ref.read(gameTypeProvider.notifier).state = GameType.flashCard;
+      state = gameData;
     } catch (e) {
       ref.read(currentFlashCardGameProvider.notifier).state = null;
       throw e;
@@ -26,5 +27,6 @@ class FlashCardGameStateNotifier extends StateNotifier<GameFlashCardDTO?> {
     await gameService.deleteCurrentFlashCardGame();
     ref.read(currentFlashCardGameProvider.notifier).state = null;
     ref.read(gameTypeProvider.notifier).state = GameType.none;
+    state = null;
   }
 }

@@ -2,7 +2,8 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:oicar_client/model/DioClient.dart';
+
+import '../model/DioClient.dart';
 
 class AuthService {
   final Dio dio = DioClient().dio;
@@ -18,8 +19,9 @@ class AuthService {
         data: jsonEncode(
             {'Username': username, 'Email': email, 'Password': password}),
       );
-      if (response.statusCode == 200 && response.data.isNotEmpty) {
-        return response.data;
+      if (response.statusCode == 200) {
+        // Return an empty map if response data is empty to indicate success
+        return response.data.isNotEmpty ? response.data : {};
       } else {
         throw Exception('Registration failed. Please try again later.');
       }
@@ -43,6 +45,7 @@ class AuthService {
 
       if (response.statusCode == 200) {
         await saveToken(response.data['token']);
+        await saveUsername(username);
         return response.data;
       } else {
         throw Exception(
@@ -56,6 +59,10 @@ class AuthService {
 
   Future<void> saveToken(String token) async {
     await storage.write(key: 'jwt_token', value: token);
+  }
+
+  Future<void> saveUsername(String username) async {
+    await storage.write(key: 'username', value: username);
   }
 
   Future<Map<String, dynamic>> getUserData() async {
@@ -89,5 +96,9 @@ class AuthService {
       print(e);
       rethrow;
     }
+  }
+
+  Future<String?> getUsername() async {
+    return await storage.read(key: 'username');
   }
 }

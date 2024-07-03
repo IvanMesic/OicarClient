@@ -12,8 +12,10 @@ GameFlashCardDTO _$GameFlashCardDTOFromJson(Map<String, dynamic> json) =>
       answer: json['answer'] as String,
       id: (json['id'] as num).toInt(),
       language: LanguageDTO.fromJson(json['language'] as Map<String, dynamic>),
-      contextImage: ContextImageDTO.fromJson(
-          json['contextImage'] as Map<String, dynamic>),
+      contextImage: json['contextImage'] == null
+          ? null
+          : ContextImageDTO.fromJson(
+              json['contextImage'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$GameFlashCardDTOToJson(GameFlashCardDTO instance) =>

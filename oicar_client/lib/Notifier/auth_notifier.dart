@@ -35,12 +35,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(status: AuthStatus.loading);
     try {
       final response = await authService.register(username, email, password);
-      if (response['token'] != null) {
+      if (response.isEmpty || response['token'] != null) {
         state = state.copyWith(status: AuthStatus.success);
       } else {
         state = state.copyWith(
-            status: AuthStatus.error,
-            error: response['error'] ?? 'Unknown registration error');
+          status: AuthStatus.error,
+          error: response['error'] ?? 'Unknown registration error',
+        );
       }
     } catch (e) {
       state = state.copyWith(status: AuthStatus.error, error: e.toString());
@@ -56,8 +57,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
         state = state.copyWith(status: AuthStatus.success);
       } else {
         state = state.copyWith(
-            status: AuthStatus.error,
-            error: response['error'] ?? 'Unknown login error');
+          status: AuthStatus.error,
+          error: response['error'] ?? 'Unknown login error',
+        );
       }
     } catch (e) {
       state = state.copyWith(status: AuthStatus.error, error: e.toString());

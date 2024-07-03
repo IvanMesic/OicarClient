@@ -5,6 +5,7 @@ import '../provider/game_providers.dart';
 import '../widgets/game_app_bar.dart';
 import '../widgets/game_image.dart';
 import '../widgets/game_loading.dart';
+import 'main_screen.dart';
 
 class PickSentenceGameScreen extends ConsumerWidget {
   const PickSentenceGameScreen({super.key});
@@ -19,8 +20,8 @@ class PickSentenceGameScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: GameAppBar(
-          title: 'Pick Sentence Game',
-          exitGame: exitGame,
+        title: 'Pick Sentence Game',
+        exitGame: exitGame,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -48,7 +49,6 @@ class PickSentenceGameScreen extends ConsumerWidget {
                     ),
                   )),
               const SizedBox(height: 20),
-
             ],
           ),
         ),
@@ -64,6 +64,9 @@ class PickSentenceGameScreen extends ConsumerWidget {
 
   void exitGame(BuildContext context, WidgetRef ref) {
     ref.read(pickSentenceGameStateNotifierProvider.notifier).resetGame();
-    Navigator.of(context).pop();
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => const MainMenuScreen()),
+      (Route<dynamic> route) => false,
+    );
   }
 }

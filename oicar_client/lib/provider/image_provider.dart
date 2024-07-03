@@ -10,6 +10,6 @@ final imageServiceProvider = Provider<ImageService>((ref) {
 });
 
 final imageStateProvider =
-    StateNotifierProvider<ImageNotifier, AsyncValue<Uint8List>>((ref) {
+    StateNotifierProvider<ImageNotifier, AsyncValue<Uint8List?>>((ref) {
   return ImageNotifier(ref.read(imageServiceProvider));
 });
